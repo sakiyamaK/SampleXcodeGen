@@ -1,0 +1,28 @@
+name: SampleXcodeGen
+options:
+  bundleIdPrefix: com.sakiyamaK
+  deploymentTarget:
+    iOS: 13.0
+packages:
+    IQKeyboardManagerSwift:
+        url: https://github.com/hackiftekhar/IQKeyboardManager
+        from: 6.5.0
+targets:
+  SampleXcodeGen:
+    platform: iOS
+    type: application
+    dependencies:
+        - package: IQKeyboardManagerSwift
+    sources:
+      - path: SampleXcodeGen
+      - path: R.generated.swift
+        optional: true
+    preBuildScripts:
+        - path: /bin/sh
+          name: Run Script(R.swift)
+          script: |
+                "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
+          inputFiles:
+                - $TEMP_DIR/rswift-lastrun
+          outputFiles:
+                - $SRCROOT/R.generated.swift
